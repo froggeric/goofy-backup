@@ -50,6 +50,13 @@ function organisePlaylists() {
         separation: 4,
       });
 
+      // ★ Latin Chill ★
+      shufflePlaylist({ 
+        name: '★ Latin Chill ★',
+        description: "[DAILY SHUFFLE " + today + "]",
+        sourceid: '1Dvvr3bXxcNBeokE8JiRCc', 
+      });
+
       // <!>Melatone 1 relax
       shufflePlaylist({ 
         name: '<!>Melatone 1 relax',
@@ -86,6 +93,14 @@ function organisePlaylists() {
         sourceid: '0W2lVKgN2AbsFus2RIAiHz', 
         targetid: '3Bsz7QecNExg8bsDdW4iGW',
         separation: 4,
+      });
+
+      // Piano
+      shufflePlaylist({
+        name: 'Piano',
+        description: "[DAILY SHUFFLE " + today + "]",
+        sourceid: '7li32mQfzXE02G0U680J2J', 
+        // separation: 4,
       });
 
       // Reggaeton
@@ -143,12 +158,33 @@ function organisePlaylists() {
         targetid: '1Tj0vECvFl2zmu2j6sC3DY',
       });
 
+      // Classical music and lullabies for sleep and relaxation (432Hz)
+      shufflePlaylist({
+        name: 'Classical music and lullabies for sleep and relaxation (432Hz)',
+        description: "[DAILY SHUFFLE " + today + "] Scientifically engineered for better sleep. Listen at low volume in stereo. Deep Waves stimulation. Vestibular stimulation. Binaural beats. Isochornic tones. 432Hz tuning.",
+        sourceid: '1gfHDlRWRYk4gk5qVQ5BXB',
+      });
+
       // Marc Anthony
       shufflePlaylist({
         name: 'Marc Anthony',
         description: "[DAILY SHUFFLE " + today + "]",
         sourceid: '4I4PdPyF2Dl2LA7G0rDKgh', 
         targetid: '1ywmwzWHIQz8aCxu8rD548',
+      });
+
+      // Queen
+      shufflePlaylist({
+        name: 'Queen',
+        description: "[DAILY SHUFFLE " + today + "]",
+        sourceid: '7iuvV4MVzSOtvbzYl1zZQN',
+      });
+
+      // Relaxing Classical Music for Sleeping, tuned to 432Hz
+      shufflePlaylist({
+        name: 'Relaxing Classical Music for Sleeping, tuned to 432Hz',
+        description: "[DAILY SHUFFLE " + today + "] Scientifically engineered music, to help you relax or fall asleep. Carefully selected tunes, arranged with calm and soothing instrumentation, with a tempo adjusted to match the desired heartbeat.",
+        sourceid: '6FfOhT7qsKwsXAqrdMIkPC',
       });
 
 
