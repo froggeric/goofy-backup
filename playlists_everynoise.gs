@@ -66,15 +66,26 @@ function everynoiseWeeklyReleases() {
 
 
   // Get the latest weekly releases and add them to an existing playlist
-  function getLastWeekReleases( name, id, genre ) {
+  function getLastWeekReleases( name, id, genre, date ) {
     
+    let tracks = {};
+    if (date === undefined ) {
+      // Parse everynoise weekly page for new releases and extract the tracks
+      tracks = Release.getTracks({
+        genre: genre,             // mandatory
+        region: 'US',
+        // date: '2022-10-28',    // can be omitted for the last available week
+        // type: 'album,single',  // optional if both types are needed
+    });
+    } else {
     // Parse everynoise weekly page for new releases and extract the tracks
-    let tracks = Release.getTracks({
+    tracks = Release.getTracks({
       genre: genre,             // mandatory
       region: 'US',
-      // date: '2022-10-28',    // can be omitted for the last available week
+      date: date,               // can be omitted for the last available week
       // type: 'album,single',  // optional if both types are needed
     });
+    }
     
     // Removed unwanted tracks
     Filter.matchExcept( tracks, banned );
@@ -90,8 +101,77 @@ function everynoiseWeeklyReleases() {
 
   }
 
-  // Organise the existing playlist, removing duplicates, old releases, and sorting my most popular artist first
   function sortNewReleases( name, id ) {
+
+    Logger.log('>>>>>>>>>>>>>>>> SORTING TRACKS <<<<<<<<<<<<<<<<<');
+
+    // Retrieve all tracks from the playlist
+    tracks = Source.getPlaylistTracks( '', id);
+     Logger.log(tracks.length + ' tracks loaded from playlist');
+
+    // Remove duplicates
+    Filter.dedupTracks( tracks );
+    Logger.log(tracks.length + ' tracks left after removing duplicates');
+
+    // Remove tracks which are already part of the library (ie: in existing playlists)
+    Filter.removeTracks(tracks, existingTracks);
+    Logger.log(tracks.length + ' tracks left after removing existing ones');
+
+    // Load additional artist metadata
+    Filter.rangeTracks( tracks, {
+      artist: { popularity: { min: 0, max: 100 }, },
+    });
+    // Retrieve cached array of the main artists. Records are unique.
+    let cache  = getCachedTracks(tracks, { artist: {}} ).artists;
+    let cachedArtists  = Object.values(cache);
+    Logger.log(cachedArtists.length + ' unique artists in cache');
+
+    // Add custom score to tracks
+    // We first iterate through all the track items
+    for (let x = 0; x < tracks.length; x++) {
+      let item = tracks[x];
+      let id = item.artists[0].id;
+      // Now we iterate through the cached artists to find a matching artist
+      for (let y = 0; y < cachedArtists.length; y++) {
+        // Check if the current cached item is a match for the current track
+        if ( id == cachedArtists[y].id ) {
+          // Calculate the score
+          let trackPopularity = item.popularity;
+          let artistPopularity = cachedArtists[y].popularity;
+          // let score = ( (4 * trackPopularity) + artistPopularity );
+          let score = ( (2 * trackPopularity) + artistPopularity );
+          // Save the score to the original track array
+          tracks[x].score = score;
+          // Logger.log( x + '  :  ' + id + ' = '+ cachedArtists[y].id + ' : ' + score);
+        }
+      }
+    }
+
+    // Remove tracks older than the cutoff time period
+    Filter.rangeTracks( tracks, {
+      album: { release_date: { sinceDays: keepDays, beforeDays: 0 }, },
+    });
+    Logger.log(tracks.length + ' tracks left after removing old tracks');
+
+    // Sort by decreasing score
+    tracks.sort((x, y) => {
+        return y.score - x.score;
+    });
+    // for (let i = 0; i < tracks.length; i++) { Logger.log(tracks[i].score + '  :  ' + tracks[i].name + ' (' + tracks[i].artists[0].name + ')');}
+
+    // Save tracks to the playlist
+    Playlist.saveWithReplace({
+      name: name,
+      id: id,
+      tracks: tracks,
+      description: description,
+      public: false,
+    });
+
+  }
+
+  // Organise the existing playlist, removing duplicates, old releases, and sorting my most popular artist first
+  function sortNewReleasesOld( name, id ) {
     
     // Retrieve all tracks from the playlist
     tracks = Source.getPlaylistTracks( '', id);
@@ -99,11 +179,11 @@ function everynoiseWeeklyReleases() {
     // Remove duplicates
     Filter.dedupTracks( tracks );
 
-    // Remove tracks older than the cutoff time period
-    Filter.rangeTracks( tracks, { album: { release_date: { sinceDays: keepDays, beforeDays: 0 }, }, });
-
     // Remove tracks which are already part of the library (ie: in existing playlists)
     Filter.removeTracks(tracks, existingTracks);
+
+    // Remove tracks older than the cutoff time period
+    Filter.rangeTracks( tracks, { album: { release_date: { sinceDays: keepDays, beforeDays: 0 }, }, });
 
     // Extract popular tracks, to help spot great releases from lesser known artists
     let popularTracks = Selector.sliceCopy(tracks);
