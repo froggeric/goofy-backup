@@ -2,8 +2,8 @@ function zipdjClassicTracks() {
 
   // let sourcePlaylist    = '7eufyawBpqQMvsIN4fgQB1'; let sourceName = 'Bachata';
   // let sourcePlaylist    = '7htbYn8f0q01n5br4XhQR9'; let sourceName = 'Cumbia';
-  // let sourcePlaylist    = '3Bsz7QecNExg8bsDdW4iGW'; let sourceName = 'Merengue';
-  let sourcePlaylist    = '0o2GXyncPfGLmGSiOqSINx'; let sourceName = 'Salsa';
+  let sourcePlaylist    = '3Bsz7QecNExg8bsDdW4iGW'; let sourceName = 'Merengue';
+  // let sourcePlaylist    = '0o2GXyncPfGLmGSiOqSINx'; let sourceName = 'Salsa';
 
   let numTracks         = 20;
   let archivePlaylist   = '1BQCyWrAkSLiDsra9TZgn8'; let archiveName = '[zipdj] all songs';
