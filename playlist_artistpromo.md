@@ -17,7 +17,7 @@ This is your personal catalog, containing **only your own tracks**. The order is
 *   **Other Tracks:** All other songs from this playlist will be thoughtfully distributed throughout the remainder of the `Combined Playlist`.
 
 ### The Promo Playlist
-This is your hand-picked collection of tracks from **other artists**. These are the songs you want your own music to be associated with. Think of it as creating the perfect musical neighborhood for your tracks to live in. The script will automatically sort these tracks by popularity to build the final playlist.
+This is your hand-picked collection of tracks from **other artists**. These are the songs you want your own music to be associated with. Think of it as creating the perfect musical neighborhood for your tracks to live in. The script will automatically use the popularity score from these tracks to build the final playlist.
 
 ### The Combined Playlist
 This is the final, public-facing playlist that the script generates. On each run, the script completely replaces the contents of this playlist with a new, freshly organized set of tracks. The listening experience is designed as follows:
