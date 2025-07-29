@@ -173,12 +173,3 @@ Use this prompt to have an AI act as your personal A&R scout to find excellent t
 > *   `Artist`
 > *   `Track Title`
 > *   `Justification` (A brief explanation of why this track/artist is a good fit, e.g., "Shares the same baritone vocal style and driving rhythm" or "A hugely popular track in the genre that will attract listeners").
-
-#### **Example Usage of the AI Prompt**
-
-**My Artist Profile:**
-*   **My Artist Name:** `Starlight Runner`
-*   **My Genre/Style:** `Uplifting Indie Rock with 80s synth-pop influences`
-*   **Artists I Admire or Sound Like:** `The Killers, Walk the Moon, The 1975`
-
-**(The AI would then return a table with 20 recommended tracks.)**
