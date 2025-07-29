@@ -172,7 +172,6 @@ Use this prompt to have an AI act as your personal A&R scout to find excellent t
 > Present your findings in a markdown table with the following columns:
 > *   `Artist`
 > *   `Track Title`
-> *   `Spotify URL`
 > *   `Justification` (A brief explanation of why this track/artist is a good fit, e.g., "Shares the same baritone vocal style and driving rhythm" or "A hugely popular track in the genre that will attract listeners").
 
 #### **Example Usage of the AI Prompt**
