@@ -27,7 +27,7 @@ function createArtistPromoPlaylist(params) {
     // STEP 1: FETCH ALL TRACKS FROM SOURCE PLAYLISTS
     // =================================================================
     const artistTracks = Source.getTracks([{ id: artistPlaylist.id, name: artistPlaylist.name }]);
-    const promoTracksSource = Source.getTracks([{ id: promoPlaylist.id, name: promoPlaylist.name }]);
+    let promoTracksSource = Source.getTracks([{ id: promoPlaylist.id, name: promoPlaylist.name }]);
 
 
     if (!artistTracks || artistTracks.length === 0) {
@@ -40,8 +40,27 @@ function createArtistPromoPlaylist(params) {
     }
 
 
+    // =================================================================
+    // NEW: STEP 1.5: CLEAN PROMO PLAYLIST OF ARTIST'S OWN TRACKS
+    // This is a critical step to ensure data integrity and prevent logical errors.
+    // =================================================================
+    const artistId = artistTracks[0].artists[0].id;
+    const promoCountBefore = promoTracksSource.length;
+
+
+    promoTracksSource = promoTracksSource.filter(track => {
+      // A track is kept if NONE of its artists match the main artist's ID.
+      return !track.artists.some(artist => artist.id === artistId);
+    });
+    
+    const promoCountAfter = promoTracksSource.length;
+    if (promoCountBefore > promoCountAfter) {
+      Logger.log(`Cleanup: Removed ${promoCountBefore - promoCountAfter} of your own tracks that were found in the promo playlist.`);
+    }
+
+
     const initialTotalTracks = artistTracks.length + promoTracksSource.length;
-    Logger.log(`Fetched ${artistTracks.length} tracks from artist playlist and ${promoTracksSource.length} from promo playlist. Total: ${initialTotalTracks}`);
+    Logger.log(`Fetched ${artistTracks.length} tracks from artist playlist and ${promoTracksSource.length} (after cleanup) from promo playlist. Total: ${initialTotalTracks}`);
 
 
     // =================================================================
@@ -193,10 +212,6 @@ function createArtistPromoPlaylist(params) {
       id: combinedPlaylist.id,
       name: combinedPlaylist.name, // Preserves the playlist name
       tracks: finalTracks,
-      // Note: `saveWithReplace` does not preserve the description or cover by default.
-      // If you need to preserve them, they must be passed in this object.
-      // For this implementation, we assume Goofy's default behavior is sufficient,
-      // or that the name is the only critical metadata to preserve via this call.
     });
 
 
@@ -219,16 +234,16 @@ function createArtistPromoPlaylist(params) {
 function runArtistPromoUpdate() {
   const playlistConfig = {
     artistPlaylist: {
-      id: '4RGQCOmziHwObM24VyuwyD',    // <-- Replace with actual ID
-      name: 'Reference tracks',              // <-- Replace with actual Name
+      id: '6ZIvOEeO2aLaeZp0bcYBTV',    // <-- Replace with actual ID
+      name: 'nws - official',              // <-- Replace with actual Name
     },
     promoPlaylist: {
-      id: '37i9dQZF1DX9dX3aBjsxqd',     // <-- Replace with actual ID
-      name: 'Mellow Cello',             // <-- Replace with actual Name
+      id: '1NBSk4KnLzpqXlOjl6bcJP',     // <-- Replace with actual ID
+      name: 'nws - influence',             // <-- Replace with actual Name
     },
     combinedPlaylist: {
-      id: '0PWIdpFNOh7tWktxiQDTvq',  // <-- Replace with actual ID
-      name: 'Reference guitar',          // <-- Replace with actual Name
+      id: '3fDrMMM2stMDiatj729xQM',  // <-- Replace with actual ID
+      name: '🌿🧘 Relax and Focus: Serene Melodies for Work, Study and Chill',          // <-- Replace with actual Name
     },
   };
 
