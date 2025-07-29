@@ -1,213 +1,185 @@
-Of course. Here is the complete documentation for the script, broken down into the five parts you requested.
+# Artist Promotion Playlist Automator
 
-***
+This script is a powerful tool for artists looking to enhance their Spotify presence. It automatically generates a dynamic, professionally structured playlist that strategically showcases an artist's music alongside tracks from other popular and similar-sounding artists.
 
-# PART 1: Concise Overview
-
-This script is a powerful promotional tool for artists on Spotify. It automatically builds and shuffles a dynamic playlist every day, designed to capture new listeners and keep them engaged.
-
-The final playlist strategically places your most important tracks near the top, surrounded by popular songs from similar, well-known artists. The rest of the playlist is a smart mix of your other music and related tracks, creating a professional and compelling listening experience that drives discovery and showcases your work in the best possible light.
-
-***
-
-# PART 2: Preparation & How It Works
-
-To get started, you will work with three distinct Spotify playlists. The script will only ever modify the content of the final "Combined Playlist".
-
-### The 3 Core Playlists
-
-1.  **Your Artist Playlist**:
-    *   **Content**: This playlist must contain *only your own tracks*.
-    *   **Track Order is Critical**: The first 3 tracks in this playlist are given top priority. Place your most important songs (e.g., your latest single, your most popular track) in positions 1, 2, and 3. The script will feature them prominently at the very top of the final playlist. The rest of your songs in this playlist will be woven into the final mix later.
-
-2.  **Your Promo Playlist**:
-    *   **Content**: Fill this playlist with songs from *other artists* that you want to be associated with. Think of artists who have a similar sound or who your ideal fans already listen to.
-    *   **Track Order Doesn't Matter**: You can add songs in any order. The script will automatically sort them by their current popularity on Spotify to decide where they go in the final mix.
-
-3.  **The Combined Playlist**:
-    *   **Content**: This is the final, public-facing playlist that the script creates and updates.
-    *   **Strategic Placement**: The playlist is intelligently constructed. It starts with a popular track to immediately grab a listener's attention, then strategically alternates between your top 3 songs and other popular tracks.
-    *   **Daily Shuffle**: The entire playlist is refreshed daily. This keeps it from feeling static and encourages repeat listening, as the experience is slightly different each day while still maintaining its core structure.
-
-***
-
-# PART 3: Example Usage
-
-You can use the script to manage multiple promotional playlists simultaneously. The main function `createArtistPromoPlaylist` is called from a "runner" function where you define the specific IDs and names for each set of playlists.
-
-This runner function, for example `runAllDailyUpdates`, is what you should schedule to run automatically in Google Apps Script.
-
-```javascript
-/**
- * Main runner function to be scheduled in Google Apps Script.
- * This function orchestrates the updates for one or more promotional playlists.
- */
-function runAllDailyUpdates() {
-
-  // --- Example 1: An Indie Folk Promotion Playlist ---
-  const indieFolkConfig = {
-    artistPlaylist: {
-      id: '5r3aGvP3Yq9q0F9Zc9B9a1',    // Your artist playlist for your folk project
-      name: 'My Indie Folk Songs',
-    },
-    promoPlaylist: {
-      id: '7t2B8c8V6F5e4D3C2b1A0f',     // Playlist with tracks from The Lumineers, Bon Iver, etc.
-      name: 'Indie Folk Inspirations',
-    },
-    combinedPlaylist: {
-      id: '1Xy2Z3b4C5d6E7f8G9h0I1',  // The final, public "Indie Folk Discoveries" playlist
-      name: 'Indie Folk Discoveries | Daily Updated',
-    },
-  };
-  createArtistPromoPlaylist(indieFolkConfig);
-  
-  Logger.log('Finished updating the Indie Folk playlist.');
-
-
-  // --- Example 2: A Lofi Beats Promotion Playlist ---
-  const lofiBeatsConfig = {
-    artistPlaylist: {
-      id: '4pL5mN6o7P8q9R0s1T2u3V',    // Your artist playlist for your lofi project
-      name: 'My Lofi Beats',
-    },
-    promoPlaylist: {
-      id: '2kM3n4O5p6Q7r8S9t0U1vW',     // Playlist with tracks from artists like J Dilla, Nujabes, etc.
-      name: 'Lofi & Chillhop Gems',
-    },
-    combinedPlaylist: {
-      id: '6aB7c8D9e0F1g2H3i4J5kL',  // The final, public "Lofi Beats for Studying" playlist
-      name: '🌿 Lofi Beats for Studying & Focus',
-    },
-  };
-  createArtistPromoPlaylist(lofiBeatsConfig);
-  
-  Logger.log('Finished updating the Lofi Beats playlist.');
-
-}
-```
-
-***
-
-# PART 4: SEO Strategies for the Combined Playlist
-
-The title, description, and cover art are crucial for attracting listeners. They should be clear, appealing, and optimized for Spotify's search algorithm.
-
-### Strategies
-
-*   **Playlist Title**: Combine mood, genre, and a hook. Keywords are key. Users search for terms like "Chill Morning," "Workout Motivation," or "Indie Rock." Including "Daily Update" or the current year signals freshness.
-    *   *Formula*: [Mood/Activity] + [Genre] | Daily discoveries from [Your Artist Name] & more.
-*   **Playlist Description**: This is your space for more keywords. Mention similar artists, sub-genres, and the overall feeling of the playlist. Tell a story about what the playlist is perfect for (e.g., "The perfect soundtrack for late-night drives, featuring..."). End with a call to action like "Follow for daily new music!"
-*   **Cover Art**: It must be visually striking and legible as a tiny thumbnail. Use high-contrast colors and a clean aesthetic that matches the genre. A consistent visual style across your brand helps with recognition.
+The core idea is to create an engaging listening experience that drives discovery. The artist's most important tracks are featured prominently at the beginning of the playlist, surrounded by carefully selected, popular songs that capture and retain listener interest. The remainder of the artist's catalog is then seamlessly woven into the rest of the playlist, ensuring comprehensive exposure in a natural, enjoyable flow. The entire playlist is reshuffled daily to stay fresh for repeat listeners.
 
 ---
 
-### AI Prompt to Generate Titles & Descriptions
+## 1. How It Works: The Three Playlists
 
-Use this prompt with an AI like ChatGPT or Claude to generate compelling text.
+The script operates using three distinct Spotify playlists. You will need to create these in your Spotify account and provide their IDs to the script.
 
-```text
-Act as an expert Spotify playlist curator and digital marketer for an independent artist. Your goal is to create titles and descriptions that are highly engaging and optimized for Spotify SEO.
+### The Artist Playlist
+This is your personal catalog, containing **only your own tracks**. The order is important.
 
-My artist name is: [Your Artist Name]
-My main genre is: [e.g., Dream Pop]
-The playlist's mood is: [e.g., Nostalgic, Ethereal, Calming, Uplifting]
-Similar artists featured in the playlist are: [e.g., Beach House, Cocteau Twins, Men I Trust]
+*   **Top 3 Tracks:** The first three songs in this playlist are treated as your highest priority. They will be strategically placed within the top section of the final `Combined Playlist` to maximize their impact.
+*   **Other Tracks:** All other songs from this playlist will be thoughtfully distributed throughout the remainder of the `Combined Playlist`.
 
-Based on this, generate 5 unique sets of a playlist title and a playlist description.
+### The Promo Playlist
+This is your hand-picked collection of tracks from **other artists**. These are the songs you want your own music to be associated with. Think of it as creating the perfect musical neighborhood for your tracks to live in. The script will automatically sort these tracks by popularity to build the final playlist.
 
-**Requirements:**
-1.  **Title:** Must include keywords related to the mood and genre. Can use tasteful special characters (e.g., ✨,  ethereal dreams). Must be under 100 characters.
-2.  **Description:** Must be under 300 characters. It should expand on the title, mention 2-3 similar artists by name, and include a call to action like "Follow for daily discoveries." It must feel personal and authentic.
-```
+### The Combined Playlist
+This is the final, public-facing playlist that the script generates. On each run, the script completely replaces the contents of this playlist with a new, freshly organized set of tracks. The listening experience is designed as follows:
 
-### AI Prompt to Generate Cover Art Ideas
-
-Use this prompt with an AI image generator like Midjourney or DALL-E to create a stunning cover.
-
-```text
-Generate a prompt for a Spotify playlist cover. The goal is a visually striking image that looks great as a small thumbnail and perfectly captures the mood of the music.
-
-The playlist's genre is Dream Pop and Shoegaze.
-The mood is nostalgic, ethereal, and hazy, like a faded polaroid from a forgotten summer.
-The color palette should be muted pastels: soft pinks, dusty blues, and warm, hazy gold, with low contrast.
-The composition should be minimalist and atmospheric.
-
-**Create an image generation prompt that includes:**
-- A detailed description of the subject and scene (e.g., "a lone figure watching a sunset over a calm sea through a hazy, vintage lens").
-- The specific color palette and lighting (e.g., "golden hour lighting, soft focus, lens flare").
-- The artistic style (e.g., "in the style of a 1980s polaroid photograph, cinematic, vaporwave aesthetic").
-- A negative prompt to exclude unwanted elements (e.g., "--no text, logos, people's faces").
-- The required aspect ratio: --ar 1:1```
-
-***
-
-# PART 5: How to Find Great Content for the Promo Playlist
-
-Finding the right tracks to associate your music with is key. Your goal is a mix of popular, recognizable songs and hidden gems that make your playlist a go-to for discovery.
-
-### Method
-
-1.  **Start with Spotify**: Go to your artist page on Spotify. The "Fans Also Like" section is your primary source. These are artists Spotify's algorithm has already linked to you.
-2.  **Go Deeper**: Click on those related artists. Check out their top tracks and explore their "Fans Also Like" sections. This creates a branching tree of potential artists.
-3.  **Automate with Goofy**: You can use the Goofy library to automate this discovery process. Functions like `Source.getRecomArtists` or `Lastfm.getSimilarArtists` can generate lists of artists based on your own profile, saving you hours of manual research.
-4.  **Analyze & Curate**: Don't just add every track. Listen to them. Do they fit the vibe? Are they too popular or too obscure? A good promo playlist has a balance. Aim for tracks that are slightly more popular than your own to leverage their audience.
+1.  **A Strong Start:** The playlist begins with a highly popular track from your `Promo Playlist` to immediately grab the listener's attention.
+2.  **Priority Placement:** Your top 3 artist tracks are woven into the first part of the playlist, each preceded by a couple of popular tracks from other artists to keep the energy high.
+3.  **Intelligent Distribution:** The rest of your tracks are sprinkled throughout the remainder of the playlist, separated by a random number of promo tracks. This creates a balanced and varied listening journey.
+4.  **Daily Freshness:** The entire process runs daily, ensuring that while the structure remains consistent, the specific track order (especially in the main body of the playlist) is always different.
 
 ---
 
-### AI Prompt for Track Research
+## 2. Getting Started: How to Use the Script
 
-Use this prompt to get a curated list of potential tracks to add to your promo playlist.
+To use the script, you only need to edit the `runDailyPlaylistUpdate` function. This function is the main entry point that you will schedule to run automatically in Google Apps Script.
 
-```text
-Act as an expert A&R scout and music curator. My artist, [Your Artist Name], creates [Genre, e.g., Indie Folk] music. I need a list of songs by other artists to create a promotional Spotify playlist.
-
-My artist's key tracks are:
-- "[Your Track 1 Title]"
-- "[Your Track 2 Title]"
-
-The goal is to find tracks that are a perfect musical fit and will appeal to my target audience.
-
-Please provide a list of 15 songs. For each song, provide:
-1.  Artist Name
-2.  Track Title
-3.  A brief, one-sentence reason why this track is a great fit (e.g., "Shares a similar melancholic acoustic style but with a slightly more polished production that will feel familiar yet fresh to listeners.").
-
-**Constraints:**
-- The artists should generally be more popular than mine, but avoid global superstars. We're looking for the sweet spot of discoverability.
-- The songs should have been released in the last 3-4 years to keep the playlist feeling current.
-- The list should be a mix of at least 3 different but related sub-genres (e.g., for Indie Folk, include some Americana and Singer-Songwriter tracks).
-```
-
-### Example Goofy Script for Artist Discovery
-
-You can run this simple script to get a list of artists similar to a starting artist. Replace the ID with your own artist ID or that of an artist you admire.
+Inside this function, you'll find `playlistConfig` objects. Simply replace the placeholder IDs and names with the actual information from your Spotify playlists. You can copy and paste the `playlistConfig` block to automate as many different promotional playlists as you need.
 
 ```javascript
 /**
- * A simple utility function to discover new artists based on a starting artist.
- * The results are printed to the logs.
+ * EXAMPLE USAGE:
+ * This function demonstrates how to call createArtistPromoPlaylist.
+ * It should be triggered by a time-based scheduler in Google Apps Script.
  */
-function discoverSimilarArtists() {
-  // Replace with your artist ID or an artist you want to be similar to.
-  const myArtistId = 'ARTIST_ID_HERE'; 
-  
-  // You can get an artist ID from their Spotify share link.
-  // e.g., open.spotify.com/artist/ID_IS_HERE?si=...
+function runDailyPlaylistUpdate() {
+  // Example 1: Main promotional playlist for an indie rock band
+  const indieRockConfig = {
+    artistPlaylist: {
+      id: '5r35nClG2aYd30a84n6wK3',
+      name: 'Starlight Runner - Official',
+    },
+    promoPlaylist: {
+      id: '2pX9E5E23b6b1aD7dC4eF8',
+      name: 'Indie Rock Influences',
+    },
+    combinedPlaylist: {
+      id: '7qH89kE9b4c2b9F3dG5aC1',
+      name: 'Indie Rock Discoveries | feat. Starlight Runner',
+    },
+  };
+  createArtistPromoPlaylist(indieRockConfig);
 
-  // We wrap the ID in an array of objects, as the function expects.
-  const seedArtists = [{ id: myArtistId }];
 
-  // Fetch recommended artists. The Goofy library handles the API calls.
-  // This function is often more effective than the older 'getRelatedArtists'.
-  const recommendedArtists = Source.getRecomArtists(seedArtists);
-  
-  // Remove any duplicate artists from the results.
-  Filter.dedupArtists(recommendedArtists);
-
-  Logger.log(`Found ${recommendedArtists.length} recommended artists similar to artist ID ${myArtistId}:`);
-
-  recommendedArtists.forEach(artist => {
-    Logger.log(`- ${artist.name}`);
-  });
+  // Example 2: A secondary, mood-based playlist for a chillwave artist
+  const chillwaveConfig = {
+    artistPlaylist: {
+      id: '3aB4c5dE6fG7h8i9j0kL1m',
+      name: 'Ocean Tides - Official',
+    },
+    promoPlaylist: {
+      id: '1nO2pQ3rS4tU5vW6xY7zE9',
+      name: 'Chillwave & Synthwave Gems',
+    },
+    combinedPlaylist: {
+      id: '4zY7zE9xY7zE9xY7zE9xY7',
+      name: 'Midnight Drive 🌴 Chillwave & Dream Pop',
+    },
+  };
+  createArtistPromoPlaylist(chillwaveConfig);
 }
 ```
+
+---
+
+## 3. Strategy: Optimizing Your Playlist for Discovery (SEO)
+
+The script handles the track arrangement, but the playlist's "packaging" (its title, description, and cover art) is crucial for attracting clicks and followers on Spotify.
+
+### Playlist Title
+The title should be both appealing and searchable. A great formula is:
+**`[Mood or Genre] | featuring [Your Artist Name] & similar artists`**
+
+*   **Keywords:** Include popular genres (e.g., "Indie Rock," "Lofi Beats," "Synthwave") and moods (e.g., "Late Night Vibes," "Coffee Shop Acoustic," "Running Motivation").
+*   **Your Name:** Always include your artist name to build brand association.
+*   **Examples:**
+    *   `Cosmic Indie Rock | featuring Starlight Runner & more`
+    *   `Focus & Chill Lofi | with Ocean Tides`
+    *   `80s Throwback Synthwave | feat. Starlight Runner`
+
+### Playlist Description
+The description is your chance to sell the experience and add more keywords.
+
+*   **Hook:** Start with a sentence that describes the feeling or purpose of the playlist.
+*   **Key Artists:** Mention 2-3 of the most well-known artists from your `Promo Playlist` to draw in their fans.
+*   **Update Cadence:** Let people know it's updated regularly (e.g., "New tracks added daily!").
+*   **Call to Action:** End with a simple "Follow for more!"
+
+### Cover Art
+Your cover art should look professional and stand out in a sea of other playlists.
+
+*   **High Contrast & Bold Colors:** Make it pop on small screens.
+*   **Readable Text:** If you use text, ensure the font is clear and large.
+*   **Branding:** Subtly include your artist logo or a high-quality photo of yourself.
+*   **Consistency:** Maintain a consistent visual style across all your promotional playlists.
+
+### AI Prompt to Generate Your Playlist Assets
+
+Use the following prompt with an AI like ChatGPT-4 to brainstorm compelling assets for your playlist.
+
+> **AI Prompt for Playlist Assets:**
+>
+> **Persona:** You are an expert Music Marketer and Playlist Curator for Spotify. Your goal is to create playlist assets that are highly clickable, optimized for search (SEO), and build an artist's brand.
+>
+> **Context:** I am an artist creating a promotional playlist on Spotify. The playlist will feature my own music alongside popular tracks from other artists in my genre. The goal is to attract new listeners and get them to associate my music with other great artists.
+>
+> **My Artist Profile:**
+> *   **Artist Name:** `[Your Artist Name]`
+> *   **Main Genre:** `[e.g., Indie Rock, Chillwave, Folk Pop]`
+> *   **Playlist Moods/Vibes:** `[e.g., Energetic, melancholic, perfect for studying, late-night driving]`
+> *   **List of 3 Key Artists in the Playlist:** `[e.g., The Killers, Tame Impala, Arctic Monkeys]`
+>
+> **Task:** Based on my profile, generate the following assets. Provide 5 distinct options for the title.
+>
+> **1. Playlist Titles (5 Options):**
+> Create 5 compelling and SEO-friendly titles for the Spotify playlist. Use a mix of genre, mood, and artist name keywords.
+>
+> **2. Playlist Description (1 Option):**
+> Write one compelling, keyword-rich description for the playlist. It should include a hook, mention the key artists, and state that it's updated daily.
+>
+> **3. Image Generation Prompt (1 Option):**
+> Write one detailed prompt for an AI image generator (like DALL-E or Midjourney) to create professional, eye-catching cover art for the playlist. The prompt should specify the style, color palette, mood, and composition.
+
+---
+
+## 4. Curation: Finding the Right Tracks for Your Promo Playlist
+
+The success of your `Combined Playlist` heavily depends on the quality of your `Promo Playlist`. The goal is to find tracks that are not only popular but also sonically and thematically aligned with your own music.
+
+### Methodology
+1.  **Start with Spotify's Data:** Go to your artist profile on Spotify. The "Fans Also Like" section is your primary source of truth. These are the artists your current listeners are already enjoying.
+2.  **Analyze Influential Playlists:** Find the top user-created and editorial playlists in your genre (e.g., search for "Indie Rock" and filter by playlists). See which tracks and artists appear frequently. These are the gatekeepers of the genre.
+3.  **Look at Live Shows:** Research festival lineups or artists you'd dream of touring with. Who are their opening acts? Who do they open for? This provides a real-world map of your musical ecosystem.
+4.  **Filter for Vibe and Popularity:** As you gather tracks, listen to them. Do they truly fit the mood of your playlist? A mega-hit might be popular, but if it doesn't match the vibe, it could disrupt the listening experience. Aim for a mix of recognizable hits and deeper cuts from popular artists.
+
+### AI Prompt to Research and Discover Tracks
+
+Use this prompt to have an AI act as your personal A&R scout to find excellent tracks for your `Promo Playlist`.
+
+> **AI Prompt for Track Discovery:**
+>
+> **Persona:** You are a knowledgeable A&R (Artists and Repertoire) Scout and music journalist with a deep understanding of music genres and artist connections.
+>
+> **Context:** I am an artist looking to build a promotional playlist on Spotify called a `Promo Playlist`. I need to fill it with tracks from other artists that are sonically similar to my own music, or who I want to be associated with. The goal is to create a cohesive and high-quality listening experience for potential new fans.
+>
+> **My Artist Profile:**
+> *   **My Artist Name:** `[Your Artist Name]`
+> *   **My Genre/Style:** `[e.g., Melancholic Indie Rock with synth elements]`
+> *   **Artists I Admire or Sound Like:** `[List 3-5 artists, e.g., The National, Interpol, The War on Drugs]`
+>
+> **Task:**
+> Based on my profile, find **20 tracks** from **10-15 different artists** that would be a perfect fit for my `Promo Playlist`. The selection should be a mix of well-known, popular songs and some slightly less-known "deep cuts" that fit the vibe perfectly.
+>
+> Present your findings in a markdown table with the following columns:
+> *   `Artist`
+> *   `Track Title`
+> *   `Spotify URL`
+> *   `Justification` (A brief explanation of why this track/artist is a good fit, e.g., "Shares the same baritone vocal style and driving rhythm" or "A hugely popular track in the genre that will attract listeners").
+
+#### **Example Usage of the AI Prompt**
+
+**My Artist Profile:**
+*   **My Artist Name:** `Starlight Runner`
+*   **My Genre/Style:** `Uplifting Indie Rock with 80s synth-pop influences`
+*   **Artists I Admire or Sound Like:** `The Killers, Walk the Moon, The 1975`
+
+**(The AI would then return a table with 20 recommended tracks.)**
